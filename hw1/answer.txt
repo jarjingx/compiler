@@ -1,0 +1,21 @@
+【 编译原理作业5.1 】  by 熊家靖-PB4011026
+
+(a)简单的有控制流错误的C程序 test1.c，gcc编译器返回的错误信息如下：
+
+jarjingx@jarjingx-PC:~$ gcc test1.c
+test1.c: In function ‘main’:
+test1.c:3:2: error: break statement not within loop or switch
+  break;
+  ^
+
+(b)简单的不满足唯一性要求的C程序 test2.c，gcc编译器返回的错误信息如下：
+
+jarjingx@jarjingx-PC:~$ gcc test2.c
+test2.c: In function ‘main’:
+test2.c:4:7: error: conflicting types for ‘i’
+  char i;
+       ^
+test2.c:3:6: note: previous declaration of ‘i’ was here
+  int i;
+      ^
+
