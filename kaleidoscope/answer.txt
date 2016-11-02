@@ -1,0 +1,51 @@
+词法分析：
+	Q：解释函数 gettok() 如何向调用者传递 token 类别、token 语义值（数字值、变量名）
+	A：token共有6类取值代表6种类别：-1(eof)、-2(def)、-3(extern)、-4(identifier)、-5(number)、[0...255](others)
+	  gettok()通过函数的返回值传递token的类别，通过static变量NumVal传递数字值，通过static变量IdentifierStr传递变量名
+
+
+语法分析和AST的构建
+	Q：解释 ExprAST 里的 virtual 的作用，在继承时的原理（解释 vtable)
+	A：virtual 申明了该析构函数基类希望派生类能重新定义，如若派生类定义了析构函数，将覆盖基类的析构函数，否则，将使用基类的析构函数
+
+
+	Q：解释代码里的 <std::unique_ptr> 和为什么要使用它？
+	A：std::unique_ptr<CertainType>定义了指向AST中特定类型结点的指针，通过指针为媒介，才能将结点信息完整地在函数调用中进行传递，从而正确构建AST
+
+
+	Q：阅读 src/toy.cpp 中的 MainLoop 及其调用的函数. 阅读 HandleDefinition 和 HandleTopLevelExpression ，忽略 Codegen 部分，说明两者对应的 AST 结构.
+	A：HandleDefinition 产生结构：FunctionAST( PrototypeAST, ExprAST( ) )，其中 ExprAST 具有不确定的子结构
+	  HandleTopLevelExpression 产生结构：FunctionAST( PrototypeAST, ExprAST( ) )，其中 ExprAST 具有不确定的子结构
+	  区别在于：后者结构中的 PrototypeAST 是人为添加上去的，使得任何一个表达式均为一个匿名函数
+
+
+	Q：Kaleidoscope 如何在 Lexer 和 Parser 间传递信息？（token、语义值、用什么函数和变量）
+	A：Parser通过调用Lexer提供的gettok()函数，从函数的返回值中获取token
+	  若token为-4(identifier)，则其语义值存放于static变量NumVal
+	  若token为-5(number)，则其语义值存放于static变量IdentifierStr
+
+
+	Q：Kaleidoscope 如何处理算符优先级（重点解释 ParseBinOpRHS ）？解释a*b*c、a*b+c、a+b*c分别是如何被分析处理的？
+	A：所有双目运算符的优先级存放于数组 BinopPrecedence[] 中，通过调用函数 GetTokPrecedence() 返回当前 token 的优先级
+	  函数 ParseBinOpRHS() 分析得到应该处于当前双目运算符右子树中的结构
+	  其每次比较当前运算符与下一个运算符，若当前运算符优先级更高，则将下一个操作数作为其右子树，否则，将已处理部分的优先级置为当前算符优先级+1，然后递归调用剩余部分
+
+	  a*b*c 分析出的结构为 *( *( a, b ), c )
+	  a*b+c 分析出的结构为 +( *( a, b ), c )
+	  a+b*c 分析出的结构为 +( a, *( b, c ) )
+
+
+	Q：解释 Error、ErrorP、ErrorF 的作用，举例说明它们在语法分析中的应用。
+	A：Error 处理除了函数原型以外的错误信息的输出
+		e.g：1、在括号表达式中，左括号无相应的右括号匹配，通过 Error 输出 "expected ')'"
+		    2、在函数调用的参数表中，参数后面缺乏右括号或者逗号，通过 Error 输出 "Expected ')' or ',' in argument list"
+		    3、在表达式的识别中，出现未知的token，通过 Error 输出 "unknown token when expecting an expression"
+	  ErrorP 处理在函数原型中遇到的错误信息的输出
+		e.g：1、函数原型的第一个 token 不是 identifier 时，即函数名称缺失，通过 ErrorP 输出 "Expected function name in prototype"
+		    2、函数名称后紧跟的 token 不为左括号时，即左括号缺失，通过 ErrorP 输出 "Expected '(' in prototype"
+		    3、函数的参数列表结束后紧跟的 token 不为右括号时，即右括号缺失，通过 ErrorP 输出 "Expected ')' in prototype"
+	  ErrorF 并没有找到哪里有这个函数……
+
+
+	Q：Kaleidoscope 不支持声明变量和给变量赋值，那么变量的作用是什么？
+	A：作为形式参数，使得函数可以接受实际参数，增强了函数的功能
