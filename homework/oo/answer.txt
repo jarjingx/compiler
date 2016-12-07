@@ -1,0 +1,116 @@
+【使用方法】
+	class A { };
+	
+	如果希望被继承的类在其继承类上有多个实例：
+	------------------------------------------	
+	class B1 : public A { };
+	class B2 : public A { };
+	class C  : public B1, public B2 { };
+	
+	如果希望被继承的类在其继承类上仅有一个实例：
+	------------------------------------------
+	class B1 : public virtual A { };
+	class B2 : public virtual A { };
+	class C  : public B1, public B2 { };
+
+【实现特点】
+	多实例继承不申明为虚继承，使得 C 在继承 B1、 B2 时，相当于继承了两个 A，拥有 A 的两个实例
+	在访问继承得到的数据或方法时，若不给出限定范围，则编译器不知道该数据或方法来源于哪个实例中
+
+	单实例继承被申明为虚继承，使得 C 在继承 B1、 B2 时，只会继承一次 A，拥有 A 的唯一实例
+	在访问继承得到的数据或方法时，由于不存在歧义，不需要给出限定范围（当然也可以给出）
+
+	====================================================
+	           multiple.B1::key == 1
+ 	           multiple.B2::key == 2
+	             single.B3::key == 4
+	             single.B4::key == 4
+	====================================================
+	        multiple.B1::triple == 3
+	        multiple.B2::triple == 6
+	          single.B3::triple == 12
+	          single.B4::triple == 12
+	====================================================
+	  add of 'multiple.B1::key' == 0x7ffe1fc13ee0
+	  add of 'multiple.B2::key' == 0x7ffe1fc13ee4
+	  add of   'single.B3::key' == 0x7ffe1fc13f00
+	  add of   'single.B4::key' == 0x7ffe1fc13f00
+
+	由输出结果可知，多实例继承的对象 multiple，对其内处于不同实例的 key 赋值，不会相互覆盖，表明两个 key 确实不在同一单元
+	但是对于单实例继承的对象 single，对其内处于相同实例的 key 通过不同限制范围引用后赋值也会相互覆盖，表明其引用的为同一单元
+
+
+【主要错误】
+	1、当被继承的类在其继承类上有多个实例时，对其继承得到的数据不加限定范围直接引用，会导致出现歧义：
+	--------------------------------------------------------------------------------------------
+	inherits.cpp: In function ‘int main()’:
+	inherits.cpp:42:11: error: request for member ‘key’ is ambiguous
+	  multiple.key = 1;
+	           ^
+	inherits.cpp:6:6: note: candidates are: int A::key
+	  int key;
+	      ^
+	inherits.cpp:6:6: note:                 int A::key
+	--------------------------------------------------------------------------------------------
+
+
+	2、当被继承的类在其继承类上有多个实例时，对其继承得到的方法不加限定范围直接引用，会导致出现歧义：
+	--------------------------------------------------------------------------------------------
+	inherits.cpp: In function ‘int main()’:
+	inherits.cpp:46:11: error: request for member ‘triple’ is ambiguous
+	  multiple.triple( );
+	           ^
+	inherits.cpp:7:6: note: candidates are: int A::triple()
+	  int triple( )
+	      ^
+	inherits.cpp:7:6: note:                 int A::triple()
+	--------------------------------------------------------------------------------------------
+
+
+	3、当把 printf( "%p\n", print ) 作为语句放进类的 print 方法中时，g++编译报错：
+	--------------------------------------------------------------------------------------------
+	inherits.cpp: In member function ‘int A::print()’:
+	inherits.cpp:9:25: error: invalid use of non-static member function
+	   printf( "%p\n", print );
+	                         ^
+	--------------------------------------------------------------------------------------------
+
+
+	4、当使用 printf( "%p\n", multiple.B1::triple ) 输出成员函数的地址时，g++报错
+	--------------------------------------------------------------------------------------------
+	inherits.cpp: In function ‘int main()’:
+	inherits.cpp:72:72: error: invalid use of non-static member function
+	  printf( "  add of 'multiple.B1::triple' == %p\n", multiple.B1::triple );
+		                                                                        ^
+	--------------------------------------------------------------------------------------------
+
+
+	5、当使用 printf( "%p\n", &multiple.B1::triple ) 输出成员函数的地址时，g++报错
+	--------------------------------------------------------------------------------------------
+	inherits.cpp:73:66: error: ISO C++ forbids taking the address of a bound member function to form a pointer to member function.  Say 		‘&C1::triple’ [-fpermissive]
+	  printf( "  add of 'multiple.B1::triple' == %p\n", &multiple.B1::triple ) );
+	                                                                  ^
+	inherits.cpp:73:73: warning: format ‘%p’ expects argument of type ‘void*’, but argument 2 has type ‘int (A::*)()’ [-Wformat=]
+	  printf( "  add of 'multiple.B1::triple' == %p\n", &multiple.B1::triple ) );
+
+	--------------------------------------------------------------------------------------------
+
+	
+	6、当使用 printf( "%p\n",(void *)(&multiple.B1::triple) ) 输出成员函数的地址时，g++还是报错
+	--------------------------------------------------------------------------------------------
+	inherits.cpp: In function ‘int main()’:
+	inherits.cpp:74:75: error: ISO C++ forbids taking the address of a bound member function to form a pointer to member function.  Say 		‘&C1::triple’ [-fpermissive]
+	 tf( "  add of 'multiple.B1::triple' == %p\n", (void *)(&multiple.B1::triple ));
+	                                                                      ^
+	inherits.cpp:74:82: warning: converting from ‘int (A::*)()’ to ‘void*’ [-Wpmf-conversions]
+	 tf( "  add of 'multiple.B1::triple' == %p\n", (void *)(&multiple.B1::triple ));
+	                                                                             ^
+	--------------------------------------------------------------------------------------------
+
+	# 尝试了多种输出手段，包括直接输出，设置函数指针输出，将输出函数放进成员函数内 等等手段，均不能成功
+	# 直接照搬其他同学能够编译成功的代码，我的g++还是报错
+
+
+
+	
+
