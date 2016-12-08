@@ -1,0 +1,39 @@
+CPU：		intel CORE m3
+内存大小：	8G
+操作系统：	Ubuntu
+cmake目标：	make
+cmake模式：	Debug
+编译线程数：	4 -> 1
+编译耗时：	1 H 35 Min
+内存占用峰值：	> 8G
+遇到的问题：	Scanning dependencies of target clang
+		[ 98%] Building CXX object tools/clang/tools/driver/CMakeFiles/clang.dir/driver.cpp.o
+		[ 98%] Building CXX object tools/clang/tools/driver/CMakeFiles/clang.dir/cc1_main.cpp.o
+		[ 98%] Building CXX object tools/clang/tools/driver/CMakeFiles/clang.dir/cc1as_main.cpp.o
+		[ 98%] Linking CXX executable ../../../../bin/clang
+		collect2: fatal error: ld terminated with signal 9 [Killed]
+		compilation terminated.
+		tools/clang/tools/driver/CMakeFiles/clang.dir/build.make:310: recipe for target 'bin/clang-3.9' failed
+		make[2]: *** [bin/clang-3.9] Error 1
+		make[2]: *** Deleting file 'bin/clang-3.9'
+		CMakeFiles/Makefile2:17466: recipe for target 'tools/clang/tools/driver/CMakeFiles/clang.dir/all' failed
+		make[1]: *** [tools/clang/tools/driver/CMakeFiles/clang.dir/all] Error 2
+		make[1]: *** Waiting for unfinished jobs....
+		[ 98%] Built target opt
+		[ 98%] Built target LTO
+		[ 98%] Built target llvm-lto
+		Makefile:149: recipe for target 'all' failed
+		make: *** [all] Error 2
+		jarjingx@jarjingx-PC:~/LLVM/build$  
+		---------------------------------------------------------------------------------------------------------
+		经过小伙伴的提醒，判断问题为内存溢出
+解决方式：	jarjingx@jarjingx-PC:~/LLVM/build$  make -j1
+		``````
+		``````
+		``````
+		[100%] Built target llvm-mcmarkup
+		---------------------------------------------------------------------------------------------------------
+		切换单线程编译，编译成功
+		
+
+
