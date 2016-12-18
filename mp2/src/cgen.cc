@@ -635,13 +635,8 @@ void CgenEnvironment::kill_local() {
 void method_class::code(CgenEnvironment *env)
 {
 	if (cgen_debug) std::cerr << "method" << endl;
-
-	// ADD CODE HERE
     ValuePrinter vp( *( env -> cur_stream ) );
-    if ( cgen_debug ) std::cerr << "method" << endl;
-    //Return before abort so you dont end up aborting
     vp.ret( expr->code( env ) );
-    //Setup the abort call at the end of each method
     vp.begin_block("abort");
     vector<op_type> abort_args_types;
     vector<operand> abort_args;
@@ -656,14 +651,9 @@ void method_class::code(CgenEnvironment *env)
 operand assign_class::code(CgenEnvironment *env) 
 { 
 	if (cgen_debug) std::cerr << "assign" << endl;
-	// ADD CODE HERE AND REPLACE "return operand()" WITH SOMETHING 
-	// MORE MEANINGFUL
     ValuePrinter vp(*(env->cur_stream));
-    if (cgen_debug) std::cerr << "assign" << endl;
-    //Get the operand from the var table
     operand assign_operand = *(env->var_table.lookup(name));
     operand expr_operand = expr->code(env);
-    //Store the new value into the var table
     vp.store(*(env->cur_stream), expr_operand, assign_operand);
     return expr_operand;
 }
@@ -735,10 +725,10 @@ operand let_class::code(CgenEnvironment *env)
     ValuePrinter vp(*(env->cur_stream));
     op_type type = INT32;
     string tempString(type_decl->get_string());
-    if(tempString.compare("Bool") == 0){
-        type = INT1;}
-    else if(tempString.compare("Int") == 0){
-        type = INT32;}
+    if(tempString.compare("Bool") == 0)
+        type = INT1;
+    else if(tempString.compare("Int") == 0)
+        type = INT32;
     operand new_op = init->code(env);
     string iden_temp(identifier->get_string());
     operand identifier_op(type, iden_temp);
@@ -746,7 +736,8 @@ operand let_class::code(CgenEnvironment *env)
     env->add_local(identifier, new_var);
     if(!(new_op.get_type().get_id() == EMPTY))
         vp.store(*(env->cur_stream), new_op, new_var);
-    else{
+    else
+    {
         string val;
         if(type.get_id() == INT1)
             val = "false";
@@ -799,7 +790,6 @@ operand divide_class::code(CgenEnvironment *env)
     vp.branch_cond(eq_op, "abort", ok_label_new);
     vp.begin_block(ok_label_new);
     operand div_op = vp.div(e1_code, e2_code);
-
     return div_op;
 }
 
@@ -807,7 +797,6 @@ operand neg_class::code(CgenEnvironment *env)
 { 
 	if (cgen_debug) std::cerr << "neg" << endl;
     ValuePrinter vp(*(env->cur_stream));
-    if (cgen_debug) std::cerr << "neg" << endl;
     operand e1_code = e1->code(env);
     operand negated = vp.sub(int_value(0), e1_code);
     return negated;
@@ -870,7 +859,6 @@ operand object_class::code(CgenEnvironment *env)
 {
 	if (cgen_debug) std::cerr << "Object" << endl;
     ValuePrinter vp(*(env->cur_stream));
-    if (cgen_debug) std::cerr << "Object" << endl;
     operand *ret_op;
     ret_op = env->lookup(name);
     return vp.load( ret_op->get_type().get_deref_type(),*ret_op );
