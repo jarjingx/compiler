@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="mp2"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cgen-1">
+				<Option output="/home/jarjingx/PB14011026/mp2/cmake-build-debug/cgen-1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__STDC_LIMIT_MACROS"/>
+					<Add option="-D__STDC_CONSTANT_MACROS"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/cool-support/include"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/src"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 cgen-1"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cgen-1/fast">
+				<Option output="/home/jarjingx/PB14011026/mp2/cmake-build-debug/cgen-1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__STDC_LIMIT_MACROS"/>
+					<Add option="-D__STDC_CONSTANT_MACROS"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/cool-support/include"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/src"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 cgen-1/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cgen-1.o">
+				<Option output="/home/jarjingx/PB14011026/mp2/cmake-build-debug/CMakeFiles/cgen-1.o.dir/cgen-1.o.objlib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__STDC_LIMIT_MACROS"/>
+					<Add option="-D__STDC_CONSTANT_MACROS"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/cool-support/include"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/src"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 cgen-1.o"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cgen-1.o/fast">
+				<Option output="/home/jarjingx/PB14011026/mp2/cmake-build-debug/CMakeFiles/cgen-1.o.dir/cgen-1.o.objlib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jarjingx/PB14011026/mp2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__STDC_LIMIT_MACROS"/>
+					<Add option="-D__STDC_CONSTANT_MACROS"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/cool-support/include"/>
+					<Add directory="/home/jarjingx/PB14011026/mp2/src"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 cgen-1.o/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jarjingx/PB14011026/mp2/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/ast-lex.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/ast-parse.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/cgen-phase.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/cgen_supp.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/cool-tree.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/dumptype.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/handle_flags.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/str_aux.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/stringtab.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/tree.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/cool-support/src/utilities.cc">
+			<Option target="cgen-1"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/cgen.cc">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/cgen.h">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/coolrt.c">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/operand.cc">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/operand.h">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/value_printer.cc">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/src/value_printer.h">
+			<Option target="cgen-1.o"/>
+		</Unit>
+		<Unit filename="/home/jarjingx/PB14011026/mp2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

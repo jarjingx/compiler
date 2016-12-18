@@ -1,0 +1,11 @@
+/home/jarjingx/Downloads/clion-2016.3.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jarjingx/PB14011026/mp2
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jarjingx/PB14011026/mp2/cmake-build-debug
