@@ -129,21 +129,47 @@ program : class_list { ast_root = program($1); }
         ;
 
 /* If no parent is specified, the class inherits from the Object class. */
-class  	: CLASS TYPEID '{' feature_list '}' ';'
+
+//===============================================================================================
+// 类的定义：其中 C1 是为了能在发现错误后及时执行 yyerrok 而引入的标记非终结符
+//===============================================================================================
+class  	: CLASS TYPEID '{' feature_list '}'
                 { $$ = class_($2,idtable.add_string("Object"),$4, stringtable.add_string(curr_filename)); }
-        | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
+        | CLASS TYPEID INHERITS TYPEID '{' feature_list '}'
                 { $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
+        | CLASS TYPEID INHERITS TYPEID '{' '}'
+                { $$ = class_($2,$4, nil_Features(), stringtable.add_string(curr_filename)); }
+	| CLASS C1 feature_list '}'
+		{ yyerrok; }
         ;
+
+C1	: error '{'
+		{ yyerrok; }
+	;
 
 class_list
-        : class
+        : class ';'
                 { $$ = single_Classes($1); }
-        | class_list class
+        | class_list class ';'
                 { $$ = append_Classes($1,single_Classes($2)); }
+	| error ';'
+		{ yyerrok; }
+	| class_list error ';'
+		{ yyerrok; }
         ;
+//===============================================================================================
 
+
+
+//===============================================================================================
+// 参数列表的定义
+//===============================================================================================
 formal	: OBJECTID ':' TYPEID
 		{ $$ = formal($1, $3); }
+	| error ','
+		{ yyerrok; yychar = ','; }
+	| error ')'
+		{ yyerrok; yychar = ')'; }
 	;
 
 formal_list
@@ -152,28 +178,94 @@ formal_list
 	| formal_list ',' formal
 		{ $$ = append_Formals( $1, single_Formals( $3 ) ); }
 	|
-		{ $$ = nil_Formals(); }
+		{ $$ = nil_Formals(); }	
 	;
+//===============================================================================================
 
-feature	: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}' ';'
-		{ $$ = method( $1, $3, $6, $8 ); }
-	| OBJECTID ':' TYPEID ASSIGN expr ';'
+
+
+//===============================================================================================
+// 特性的定义：其中 Fe1、Fe2、Fe3 是为了能在发现错误后及时执行 yyerrok 而引入的标记非终结符
+//===============================================================================================
+feature	: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}'
+		{ $$ = method( $1, $3, $6, $8 ); printf( "1\n" ); }
+	| OBJECTID '(' formal_list ')' ':' TYPEID '{' error '}'
+		{ yyerrok; }
+	| Fe1 formal_list ')' ':' TYPEID '{' expr '}'
+		{ yyerrok; }
+	| Fe1 formal_list ')' ':' TYPEID '{' error '}'
+		{ yyerrok; }
+	| OBJECTID '(' formal_list ')' ':' Fe2 expr '}'
+		{ yyerrok; }
+	| OBJECTID '(' formal_list ')' ':' Fe2 error '}'
+		{ yyerrok; }
+	| Fe1 formal_list ')' ':' Fe2 expr '}'
+		{ yyerrok; }
+	| Fe1 formal_list ')' ':' Fe2 error '}'
+		{ yyerrok; }
+	| OBJECTID ':' TYPEID ASSIGN expr
 		{ $$ = attr( $1, $3, $5 ); }
+	| OBJECTID ':' TYPEID ASSIGN error ';'
+		{ yyerrok; yychar = ';'; }
 	| OBJECTID ':' TYPEID
 		{ $$ = attr( $1, $3, no_expr() ); }
+	| Fe3 expr
+		{ yyerrok; }
+	| Fe3 error ';'
+		{ yyerrok; yychar = ';'; }
+	| error ';'
+		{ yyerrok; yychar = ';'; }
+	;
+
+Fe1	: error '('
+		{ yyerrok; }
+	;
+
+Fe2	: error '{'
+		{ yyerrok; }
+	;
+
+Fe3	: error ASSIGN
+		{ yyerrok; }
 	;
 
 feature_list
-	: feature
+	: feature ';'
 		{ $$ = single_Features( $1 ); }
-	| feature_list feature
+	| feature_list feature ';'
 		{ $$ = append_Features( $1, single_Features( $2 ) ); }
+	| error ';'
+		{ yyerrok; }
+	| feature_list error ';'
+		{ yyerrok; }
 	|
 		{ $$ = nil_Features(); }
 	;
+//===============================================================================================
 
+
+
+//===============================================================================================
+// case 语句的定义：其中 Ca1、Ca2 是为了能在发现错误后及时执行 yyerrok 而引入的标记非终结符
+//===============================================================================================
 case	: OBJECTID ':' TYPEID DARROW expr ';'
 		{ $$ = branch( $1, $3, $5 ); }
+	| OBJECTID ':' TYPEID DARROW error ';'
+		{ yyerrok; }
+	| Ca2 expr ';'
+		{ yyerrok; }	
+	| Ca2 error ';'
+		{ yyerrok; }	
+	| error ';'
+		{ yyerrok; }
+	;
+
+Ca1	: error OF
+		{ yyerrok; }
+	;
+	
+Ca2	: error DARROW
+		{ yyerrok; }
 	;
 
 case_list
@@ -182,7 +274,13 @@ case_list
 	| case_list case
 		{ $$ = append_Cases( $1, single_Cases( $2 ) ); }
 	;
+//===============================================================================================
 
+
+
+//===============================================================================================
+// let 语句的定义
+//===============================================================================================
 let	: OBJECTID ':' TYPEID IN expr
 		{ $$ = let( $1, $3, no_expr(), $5 ); }
 	| OBJECTID ':' TYPEID ASSIGN expr IN expr
@@ -190,27 +288,91 @@ let	: OBJECTID ':' TYPEID IN expr
 	| OBJECTID ':' TYPEID ',' let
 		{ $$ = let( $1, $3, no_expr(), $5); }
 	| OBJECTID ':' TYPEID ASSIGN expr ',' let
-		{$$ = let( $1, $3, $5, $7 ); }
+		{ $$ = let( $1, $3, $5, $7 ); }
+	| error IN expr
+		{ yyerrok; }
 	;
+//===============================================================================================
 
-expr	: OBJECTID ASSIGN expr
+
+
+//===============================================================================================
+// 表达式的定义
+//===============================================================================================
+expr	// 处理赋值语句	
+	: OBJECTID ASSIGN expr
 		{ $$ = assign( $1, $3 ); }
+
+	// 处理第一种形式的方法调用
 	| expr '@' TYPEID '.' OBJECTID '(' expr_list_comma ')'
 		{ $$ = static_dispatch( $1, $3, $5, $7 ); }
+	| expr '@' M1 OBJECTID '(' expr_list_comma ')'
+		{ yyerrok; }
+	| expr '@' TYPEID '.' M2 expr_list_comma ')'
+		{ yyerrok; }
+	| expr '@' M1 M2 expr_list_comma ')'
+		{ yyerrok; }
+
+	// 处理第二种形式的方法调用
 	| expr '.' OBJECTID '(' expr_list_comma ')'
 		{ $$ = dispatch( $1, $3, $5 ); }
+	| expr '.' M2 expr_list_comma ')'
+		{ yyerrok; }
+
+	// 处理第三种形式的方法调用
 	| OBJECTID '(' expr_list_comma ')'
 		{ $$ = dispatch( object( idtable.add_string( "self" ) ), $1, $3 ); }
+	| M2 expr_list_comma ')'
+		{ yyerrok; }
+
+	// 处理条件语句
 	| IF expr THEN expr ELSE expr FI
 		{ $$ = cond( $2, $4, $6 ); }
+	/*| I1 THEN expr ELSE expr FI
+		{ yyerrok; }
+	| IF expr I2 ELSE expr FI
+		{ yyerrok; }
+	| IF expr THEN expr I3
+		{ yyerrok; }
+	| I1 I2 ELSE expr FI
+		{ yyerrok; }
+	| I1 THEN expr I3
+		{ yyerrok; }
+	| IF expr I2 I3
+		{ yyerrok; }
+	| I1 I2 I3
+		{ yyerrok; }
+	| IF error THEN error ELSE error FI
+		{ yyerrok; }*/
+
+	// 处理循环语句
 	| WHILE expr LOOP expr POOL
 		{ $$ = loop( $2, $4 ); }
+	/*| WHILE W1 expr POOL
+		{ yyerrok; }
+	| WHILE expr LOOP W2
+		{ yyerrok; }
+	| WHILE W1 W2
+		{ yyerrok; }*/
+	| WHILE error POOL
+		{ yyerrok; }
+	
+
+	// 处理语句块
 	| '{' expr_list '}'
 		{ $$ = block( $2 ); }
+
+	// 处理 let 语句
 	| LET let
 		{ $$ = $2; }
+
+	// 处理 case 语句
 	| CASE expr OF case_list ESAC
 		{ $$ = typcase( $2, $4 ); }
+	| CASE Ca1 case_list ESAC
+		{ yyerrok; }
+
+	// 处理运算
 	| NEW TYPEID
 		{ $$ = new_( $2 ); }
 	| ISVOID expr
@@ -234,7 +396,9 @@ expr	: OBJECTID ASSIGN expr
 	| NOT expr
 		{ $$ = comp( $2 ); }
 	| '(' expr ')'
-		{ $$ = $2; }
+		{ $$ = $2; } 
+	
+	// 处理表达式元
 	| OBJECTID
 		{ $$ = object( $1 ); }
 	| INT_CONST
@@ -243,13 +407,51 @@ expr	: OBJECTID ASSIGN expr
 		{ $$ = string_const( $1 ); }
 	| BOOL_CONST
 		{ $$ = bool_const( $1 ); }
+
+	// 处理错误
+	| error '@'
+		{ yyerrok; yychar = '@'; }
+	| error '.'
+		{ yyerrok; yychar = '.'; }
 	;
 
+M1	: error '.'
+		{ yyerrok; }
+	;
+
+M2	: error '('
+		{ yyerrok; }
+	;
+/*
+I1	: IF error THEN
+		{ yyerrok; yyclearin; yychar = THEN; printf( "I1\n" ); }
+	;
+
+I2	: THEN error ELSE
+		{ yyerrok; yyclearin; yychar = ELSE; printf( "I2\n" );}
+	;
+
+I3	: ELSE error FI
+		{ yyerrok; printf( "I3\n" ); }
+	;
+
+W1	: error LOOP
+		{ yyerrok; }
+	;
+
+W2	: error POOL
+		{ yyerrok; }
+	;
+*/
 expr_list
 	: expr ';'
 		{ $$ = single_Expressions( $1 ); }
 	| expr_list expr ';'
 		{ $$ = append_Expressions( $1, single_Expressions( $2 ) ); }
+	| error ';'
+		{ yyerrok; }
+	| expr_list error ';'
+		{ yyerrok; }
 	;
 
 expr_list_comma
@@ -258,8 +460,19 @@ expr_list_comma
 	| expr_list_comma ',' expr
 		{ $$ = append_Expressions( $1, single_Expressions( $3 ) ); }
 	|
-		{ $$ = nil_Expressions(); }
+		{ $$ = nil_Expressions( ); }
+	| error ','
+		{ yyerrok; yychar = ','; }
+	| error ')'
+		{ yyerrok; yychar = ')'; }
+	| expr_list_comma ',' error ','
+		{ yyerrok; yychar = ','; }
+	| expr_list_comma ',' error ')'
+		{ yyerrok; yychar = ')'; }
 	;
+//===============================================================================================
+
+
 
 /* end of grammar */
 %%

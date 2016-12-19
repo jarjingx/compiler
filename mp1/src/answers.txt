@@ -1,1 +1,132 @@
-目前只完成了最基本的语法分析功能，还未加入错误处理
+=========================================================================================================================
+1、可以在class首部出错后，继续解析class中feature的错误
+-------------------------------------------------------------------------------------------------------------------------
+class a {
+    a : b <- 0; 
+    A : B <- 0;
+};
+
+class A inheits A {
+    a : b <- 0; 
+    A : B <- 0;
+};
+
+class a inheits a {
+    a : b <- 0; 
+    A : B <- 0;
+};
+-------------------------------------------------------------------------------------------------------------------------
+"test.cl", line 1: syntax error at or near OBJECTID = a
+"test.cl", line 2: syntax error at or near OBJECTID = b
+"test.cl", line 3: syntax error at or near TYPEID = A
+"test.cl", line 6: syntax error at or near OBJECTID = inheits
+"test.cl", line 7: syntax error at or near OBJECTID = b
+"test.cl", line 8: syntax error at or near TYPEID = A
+"test.cl", line 11: syntax error at or near OBJECTID = a
+"test.cl", line 12: syntax error at or near OBJECTID = b
+"test.cl", line 13: syntax error at or near TYPEID = A
+Compilation halted due to lex and parse errors
+=========================================================================================================================
+
+=========================================================================================================================
+2、可以准确指出方法定义的名字和类型错误，并在此基础上继续解析方法内参数定义的错误
+-------------------------------------------------------------------------------------------------------------------------
+class A {
+    A( B : b, c : C, D : d ) : x {
+        {
+	    a <- 0;
+	    A <- 0;
+	}
+    };
+};
+-------------------------------------------------------------------------------------------------------------------------
+"test.cl", line 2: syntax error at or near TYPEID = A
+"test.cl", line 2: syntax error at or near TYPEID = B
+"test.cl", line 2: syntax error at or near TYPEID = D
+"test.cl", line 2: syntax error at or near OBJECTID = x
+"test.cl", line 5: syntax error at or near TYPEID = A
+Compilation halted due to lex and parse errors
+=========================================================================================================================
+
+=========================================================================================================================
+3、可以在 case 语句首部出错后，继续解析 case 各分支的错误，且各分支的断言格式错误时，还能继续解析表达式的错误
+-------------------------------------------------------------------------------------------------------------------------
+class A {
+    a( ) : A {
+        case A of
+	    a : A => a  a;
+	    B : B => b + b;
+	    c : c => c 1 c;
+	esac
+    };
+};
+-------------------------------------------------------------------------------------------------------------------------
+"test.cl", line 3: syntax error at or near TYPEID = A
+"test.cl", line 4: syntax error at or near OBJECTID = a
+"test.cl", line 5: syntax error at or near TYPEID = B
+"test.cl", line 6: syntax error at or near OBJECTID = c
+"test.cl", line 6: syntax error at or near INT_CONST = 1
+Compilation halted due to lex and parse errors
+=========================================================================================================================
+
+=========================================================================================================================
+4、可以在let语句首部出错后，继续解析let表达式中的错误
+-------------------------------------------------------------------------------------------------------------------------
+class A {
+    a( ) : Int {
+	(let A : A <- 0 in	
+            {
+	        a( a 1 );
+	        a( a 1, a, a 1 );
+	    }
+        )
+     };
+};
+-------------------------------------------------------------------------------------------------------------------------
+"test.cl", line 3: syntax error at or near TYPEID = A
+"test.cl", line 5: syntax error at or near INT_CONST = 1
+"test.cl", line 6: syntax error at or near INT_CONST = 1
+"test.cl", line 6: syntax error at or near INT_CONST = 1
+Compilation halted due to lex and parse errors
+=========================================================================================================================
+
+=========================================================================================================================
+5、可以准确指出三种方法调用的基本格式错误，且在基本格式错误时，还能继续解析参数列表中各个实参的错误
+-------------------------------------------------------------------------------------------------------------------------
+class A {
+    a( ) : A {
+	{
+            A( a );
+	    A( a 1 );
+	    A( a 1, a, a 1 );
+	    A + 1 . B( a );
+	    A + 1 . B( a 1 );
+	    A + 1 . B( a 1, a, a 1 );
+	    A + 1 @ b . C( a );
+	    A + 1 @ A . C( a 1 );
+	}
+    };
+};
+-------------------------------------------------------------------------------------------------------------------------
+"test.cl", line 4: syntax error at or near TYPEID = A
+"test.cl", line 5: syntax error at or near TYPEID = A
+"test.cl", line 5: syntax error at or near INT_CONST = 1
+"test.cl", line 6: syntax error at or near TYPEID = A
+"test.cl", line 6: syntax error at or near INT_CONST = 1
+"test.cl", line 6: syntax error at or near INT_CONST = 1
+"test.cl", line 7: syntax error at or near TYPEID = A
+"test.cl", line 7: syntax error at or near TYPEID = B
+"test.cl", line 8: syntax error at or near TYPEID = A
+"test.cl", line 8: syntax error at or near TYPEID = B
+"test.cl", line 8: syntax error at or near INT_CONST = 1
+"test.cl", line 9: syntax error at or near TYPEID = A
+"test.cl", line 9: syntax error at or near TYPEID = B
+"test.cl", line 9: syntax error at or near INT_CONST = 1
+"test.cl", line 9: syntax error at or near INT_CONST = 1
+"test.cl", line 10: syntax error at or near OBJECTID = b
+"test.cl", line 10: syntax error at or near TYPEID = C
+"test.cl", line 11: syntax error at or near TYPEID = A
+"test.cl", line 11: syntax error at or near TYPEID = C
+"test.cl", line 11: syntax error at or near INT_CONST = 1
+Compilation halted due to lex and parse errors
+=========================================================================================================================
